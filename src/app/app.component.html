@@ -1,0 +1,101 @@
+<!-- <button mat-stroked-button (click)="openSnackBar(message.value, action.value)">Show snack-bar</button> -->
+
+<div *ngIf="mainPage">
+  
+  <div class="header-container">
+    <h3 >Date</h3>
+    <input type="date" class="calendar-input" style="margin-left: 10px;" [(ngModel)]="date">
+    <div class="company-name-container" style="padding-left: 15%; padding-right: 15%;">
+      <input type="text" class="company-name-input" placeholder="Company Name" [(ngModel)]="companyName">
+    </div>
+  </div>
+  <div class="header-container" style="padding-left: 24%;">
+    <div class="quotation-container" style="padding-left: 15%; padding-right: 15%;">
+      <input type="text" class="quotation-input" placeholder="Quotation Number" [(ngModel)]="quotationNumber">
+    </div>
+    <div class="add-button-container">
+      <button class="add-button" (click)="addItem()">Add Row</button>
+    </div>
+    <div class="add-button-container">
+      <button class="add-button" style="background-color: brown;" (click)="showPreviousList()">Previous Data</button>
+    </div>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Serial Number</th>
+        <th>Item Number</th>
+        <th>Item Name</th>
+        <th>MRP</th>
+        <th>Discount</th>
+        <th>Discount Rate</th>
+        <th>Quantity</th>
+        <th>Total Value</th>
+        <th>Remark</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items; let i = index">
+        <td>{{ i +1 }}</td>
+        <td>
+          <input list="itemNumbers" type="text"  (input)="selectOption($event, item.serialNumber)" />
+          <datalist id="itemNumbers">
+            <option *ngFor="let data of excelModel" [ngValue]="data">{{ data.itemNumber }}</option>
+          </datalist>
+        </td>
+        <td>{{ item.itemName }}</td>
+        
+        <td>{{ item.mrp }}</td>
+        <td><input type="number"  [(ngModel)]="item.discount" (input)="applyDiscount($event, item.serialNumber)"/></td>
+        <td>{{ item.rate }}</td>
+        <td><input type="number" [(ngModel)]="item.quantity" (input)="applyQuantity($event, item.serialNumber)" /></td>
+        <td>{{ item.value }}</td>
+        <td>{{ item.remark }}</td>
+        <td><button (click)="deleteItem(item)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <div style="position: fixed; bottom: 20px; right: 20px;">
+    <button (click)="exportToExcel()">Download Excel</button>
+  </div>
+  
+ </div>
+<div *ngIf="!mainPage">
+
+  <div class="add-button-container" style="padding-top: 2%;">
+    <button class="add-button" style="background-color: rgb(8, 100, 3);" (click)="showMainPage()">Back</button>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Serial Number</th>
+        <th scope="col">Filename</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let fileName of files; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ fileName }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="downLoadOneFileFromGithub(fileName)">Download</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+
+   <!-- 
+  <div style="bottom: 20px; right: 20px;">
+    <button (click)="getFilesName()">Files anmes Excel</button>
+  </div>
+  
+  <div style="bottom: 20px; right: 20px;">
+    <button (click)="downLoadFileFromGithub()">doenladsfds anmes Excel</button>
+  </div> -->
+
+</div>
